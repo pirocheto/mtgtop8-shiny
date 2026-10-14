@@ -257,6 +257,28 @@ never the last one, so the UI keeps offering "Next" after a full page.
 
 ---
 
+## Deploying to Vercel
+
+The site can also run on [Vercel](https://vercel.com), whose free Hobby plan
+covers a personal project like this one. [`vercel.json`](vercel.json) does
+what nginx does in the image:
+
+- **The proxy.** `/mtgtop8/*` is rewritten to `https://mtgtop8.com/*`, query
+  string and POST body included, so the browser keeps reading mtgtop8 through
+  the site's own origin.
+- **The SPA fallback.** Any other path that is not a file gets `index.html`.
+- **The prefix.** The build runs with `VITE_BASE_PATH=/`, for the root of the
+  domain: a `/` is stripped to nothing, where an empty value would fall back
+  to the prefix in `.env.production`.
+- **Caching.** Hashed assets for a year, mtgtop8's images for a week,
+  `index.html` never. There is no shared cache of mtgtop8's pages as nginx
+  keeps; each browser still keeps them five minutes.
+
+Once, import the repository on vercel.com (sign in with GitHub). Every push to
+`main` then deploys, and every pull request gets a preview URL.
+
+---
+
 ## License
 
 [MIT](LICENSE). Not affiliated with mtgtop8.com, Scryfall, or Wizards of the
