@@ -1,0 +1,172 @@
+# nginx site config, rendered at container start.
+#
+# The `.template` suffix is not decoration: the nginx image runs every file in
+# /etc/nginx/templates through envsubst and writes the result to
+# /etc/nginx/conf.d/. That is what lets one image serve under any prefix --
+# ${BASE_PATH} below is substituted from the environment of the running
+# container, not baked in at build time like the asset URLs are.
+#
+# Only the variables named in NGINX_ENVSUBST_FILTER are substituted, so nginx's
+# own $uri and $host survive untouched.
+#
+# ⚠️  This file has to stay valid when BASE_PATH is EMPTY -- that is the image's
+# default, what a bare `docker run` gets, and what serving at the root of a
+# domain looks like. Every location below is therefore written so that it does
+# not collapse into a duplicate or an empty match when the prefix disappears.
+# `location = ${BASE_PATH}/health` and a separate `location = /health` would be
+# the same block at an empty prefix, and nginx refuses to start on a duplicate.
+
+# A cache of mtgtop8, shared by every visitor: a page one of them asked for
+# is served to the next ones without asking the site again, and the last copy
+# keeps being served while the site is down. Under /tmp, the one place the
+# unprivileged image may write. 200 MB is ample: a page is a few dozen KB, an
+# image a few.
+proxy_cache_path /tmp/nginx-mtgtop8 levels=1:2 keys_zone=mtgtop8:10m max_size=200m inactive=7d use_temp_path=off;
+
+server {
+    # 8080, not 80: the unprivileged image cannot bind a port below 1024.
+    listen 8080;
+    server_name _;
+
+    root /usr/share/nginx/html;
+
+    # Redirects stay relative. Behind a reverse proxy the container's own host
+    # and port are not what the client used, so an absolute redirect built from
+    # them points at an address nobody can reach.
+    absolute_redirect off;
+
+    # The health check. Never cached, and answered by nginx itself: it says
+    # the container is serving, which for a bag of static files is the whole of
+    # what there is to know.
+    #
+    # Matched BOTH under the prefix, which is what the reverse proxy hits, and at the
+    # bare root, which is what the container's own health check and a local
+    # `docker run` use. One regex with an optional prefix rather than two
+    # blocks: at an empty BASE_PATH two blocks would be the same block, and
+    # nginx refuses to start on a duplicate location.
+    location ~ ^(${BASE_PATH})?/health$ {
+        access_log off;
+        add_header Content-Type application/json;
+        return 200 '{"status":"ok"}';
+    }
+
+    # Vite emits content-hashed filenames for everything under /assets/, so
+    # those are immutable. Before the catch-all below, because the first
+    # matching regex wins.
+    # `alias` with a CAPTURE, not a rewrite: in a regex location nginx wants
+    # the aliased path to come from the match itself, and `alias` combined with
+    # `rewrite ... break` makes it resolve the path twice and return a 500.
+    location ~ ^${BASE_PATH}/assets/(?<asset>.+)$ {
+        alias /usr/share/nginx/html/assets/$asset;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
+    # mtgtop8.com sends no CORS headers, so the SPA reads it through this
+    # origin. The capture drops the prefix: <prefix>/mtgtop8/format?f=MO goes
+    # upstream as /format?f=MO. A variable in proxy_pass needs a resolver.
+    #
+    # Its images (archetype thumbnails, deck pictures, card scans) never
+    # change once published: cached a week here and in the browser. Before
+    # the pages' location, because the first matching regex wins.
+    location ~ ^${BASE_PATH}/mtgtop8/(?<upstream>(?:metas_thumbs|deckpics|pics)/.*)$ {
+        resolver 1.1.1.1 8.8.8.8 valid=300s ipv6=off;
+        proxy_pass https://mtgtop8.com/$upstream$is_args$args;
+        proxy_set_header Host mtgtop8.com;
+        proxy_set_header Cookie "";
+        proxy_ssl_server_name on;
+        proxy_hide_header Set-Cookie;
+        proxy_ignore_headers Cache-Control Expires Set-Cookie;
+
+        proxy_cache mtgtop8;
+        proxy_cache_valid 200 7d;
+        proxy_cache_valid 404 1h;
+        proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+        proxy_cache_lock on;
+
+        proxy_hide_header Cache-Control;
+        add_header Cache-Control "public, max-age=604800";
+        add_header X-Cache $upstream_cache_status;
+        access_log off;
+    }
+
+    # The pages, five minutes: mtgtop8 changes a few times an hour at most.
+    # The search, the most played cards and the Commander tool are POST forms,
+    # so POST is cached too, keyed on the form as well as the URL.
+    location ~ ^${BASE_PATH}/mtgtop8/(?<upstream>.*)$ {
+        resolver 1.1.1.1 8.8.8.8 valid=300s ipv6=off;
+        proxy_pass https://mtgtop8.com/$upstream$is_args$args;
+        proxy_set_header Host mtgtop8.com;
+        proxy_set_header Cookie "";
+        proxy_ssl_server_name on;
+        proxy_hide_header Set-Cookie;
+        # The site's own headers would forbid caching; its pages are public.
+        proxy_ignore_headers Cache-Control Expires Set-Cookie Vary;
+
+        proxy_cache mtgtop8;
+        proxy_cache_methods GET HEAD POST;
+        # $request_body is only set once nginx holds the whole body in memory:
+        # the forms are a few hundred bytes, well under this.
+        client_body_buffer_size 16k;
+        proxy_cache_key "$request_method|$upstream$is_args$args|$request_body";
+        proxy_cache_valid 200 5m;
+        # Two visitors asking at once make one request upstream, and while
+        # the site is down or slow the last copy is served, however old.
+        proxy_cache_lock on;
+        proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+        proxy_cache_background_update on;
+
+        proxy_hide_header Cache-Control;
+        add_header Cache-Control "public, max-age=300";
+        # HIT, MISS, STALE...: what the cache did, for debugging.
+        add_header X-Cache $upstream_cache_status;
+    }
+
+    # index.html must never be cached, or a deployment would not reach a
+    # browser that already has it.
+    location ~ ^${BASE_PATH}/index\.html$ {
+        alias /usr/share/nginx/html/index.html;
+        add_header Cache-Control "no-store";
+    }
+
+    # Everything else under the prefix.
+    #
+    # The reverse proxy routes ${BASE_PATH}* here WITHOUT rewriting the path, so the
+    # files have to be reachable under that prefix. They are laid out at the
+    # root of the image, so the prefix is stripped here instead.
+    #
+    # SPA fallback: a deep link like /app/items/42 is a client-side route, not
+    # a file. Anything that is not on disk gets index.html, and the router
+    # takes it from there. $uri/ before the fallback so a real directory still
+    # gets its index.
+    location ${BASE_PATH}/ {
+        alias /usr/share/nginx/html/;
+        try_files $uri $uri/ /index.html;
+
+        add_header Cache-Control "no-store";
+    }
+
+    # Serving under a prefix, `/app` without the trailing slash is a different
+    # location from `/app/`, and would 404 instead of loading the SPA.
+    #
+    # A RELATIVE redirect, and `absolute_redirect off` above it: nginx would
+    # otherwise build an absolute URL from its own host and port, sending the
+    # browser to :8080 -- the container's port, which is not the one the
+    # reverse proxy listens on and not a port the client can reach.
+    location = ${BASE_PATH} {
+        return 301 ${BASE_PATH}/;
+    }
+
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css application/javascript application/json image/svg+xml;
+
+    # The SPA holds no secrets worth a CSP debate here, but these three cost
+    # nothing and turn off the obvious footguns. A project that needs a real
+    # Content-Security-Policy adds it here.
+    add_header X-Content-Type-Options nosniff;
+    add_header X-Frame-Options SAMEORIGIN;
+    add_header Referrer-Policy strict-origin-when-cross-origin;
+}

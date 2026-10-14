@@ -1,0 +1,32 @@
+# Node
+node_modules/
+dist/
+.npm/
+
+# Playwright: the report, the traces and screenshots of a failing run, and the
+# browsers themselves when someone points the cache at the project.
+playwright-report/
+test-results/
+blob-report/
+.playwright/
+playwright/.cache/
+
+# Snapshots, console logs and screenshots the Playwright MCP server writes
+# while an agent drives the app. See .mcp.json.
+.playwright-mcp/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+# Build-time config of the production bundle, not a secret: it must be tracked,
+# and `.env.*` above would otherwise swallow it.
+!.env.production
+
+# Editors / OS
+.DS_Store
+
+# Agents' local skills and settings, never shared.
+.claude/
+.agents/
+.kiro/

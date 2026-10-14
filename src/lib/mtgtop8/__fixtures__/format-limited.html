@@ -1,0 +1,677 @@
+
+	<!DOCTYPE HTML>
+	<html lang="en">
+	
+<head>
+<title>Limited events and metagame @ mtgtop8.com</title>
+<link rel="icon" type="image/png" href="https://www.mtgtop8.com/graph/favicon.png">
+<link href="/styles.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="https://cache.consentframework.com/js/pa/39346/c/PMQm4/stub"></script>
+<script type="text/javascript" src="https://choices.consentframework.com/js/pa/39346/c/PMQm4/cmp" async></script>
+
+	<script async="async" src="//cdn-a.yieldlove.com/v2/yieldlove.js?mtgtop8.com"></script>
+	<script async='async' src='https://securepubads.g.doubleclick.net/tag/js/gpt.js'></script>
+	<script>
+	var googletag = googletag || {};
+	googletag.cmd = googletag.cmd || [];
+	googletag.cmd.push(function() {
+	googletag.pubads().disableInitialLoad();
+	googletag.enableServices();
+	});
+	</script>
+<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-0Q2DH80JYF"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-0Q2DH80JYF');
+	</script>
+
+<script>
+
+var x
+var y
+
+function MAJCoords(evt){
+	x=evt.clientX
+	y=evt.clientY
+	return false;	
+}
+
+
+function AffOther(pref){
+	odel=document.getElementById("other_div");
+	var r = odel.getBoundingClientRect();
+
+	if (document.documentElement && document.documentElement.scrollTop) {theTop = document.documentElement.scrollTop;}
+	else if (document.body) {theTop = document.body.scrollTop;}
+	
+	if(document.getElementById("other_tooltip").style.visibility=="visible"){
+		document.getElementById("other_tooltip").style.visibility="hidden";
+	}
+	else {
+		document.getElementById("other_tooltip").style.width=(r.right-r.left+80)+"px";
+		document.getElementById("other_tooltip").style.left=(r.left-40)+"px";
+		document.getElementById("other_tooltip").style.top=(theTop+r.top+30)+"px";
+		document.getElementById("other_tooltip").style.visibility="visible";
+	}
+	
+}
+
+function EffOther(){document.getElementById('other_tooltip').style.visibility="hidden";}
+
+function AffMTGA(pref){
+	odel=document.getElementById("mtga_div");
+	var r = odel.getBoundingClientRect();
+
+	if (document.documentElement && document.documentElement.scrollTop) {theTop = document.documentElement.scrollTop;}
+	else if (document.body) {theTop = document.body.scrollTop;}
+	
+	if(document.getElementById("mtga_tooltip").style.visibility=="visible"){
+		document.getElementById("mtga_tooltip").style.visibility="hidden";
+	}
+	else {
+		document.getElementById("mtga_tooltip").style.width=(r.right-r.left+80)+"px";
+		document.getElementById("mtga_tooltip").style.left=(r.left-40)+"px";
+		document.getElementById("mtga_tooltip").style.top=(theTop+r.top+30)+"px";
+		document.getElementById("mtga_tooltip").style.visibility="visible";
+	}
+	
+}
+
+function EffMTGA(){document.getElementById("mtga_tooltip").style.visibility="hidden";}
+
+</script>
+</head>
+	<body onmousemove="MAJCoords(event)">
+	<div align=center class=page>
+	<div style="max-width:1280px;" valign=top>
+<div id=other_tooltip style="visibility:hidden;width:200px;z-index:10;position: absolute;box-shadow: 0px 10px 10px #666666;padding:2px;background:white;border: 1px white solid;">
+
+	<div id=other_tooltip_content style="padding:3px;" align=center>
+	<div style="padding-bottom:15px;"><div  style="position:relative;"><a class=menu_item href=/format?f=PEA>PEASANT</a></div></div>
+	<div style="padding-bottom:15px;"><div  style="position:relative;"><a class=menu_item href=/format?f=BL>BLOCK</a></div></div>
+	<div style="padding-bottom:15px;"><div  style="position:relative;"><a class=menu_item href=/format?f=EX>EXTENDED</a></div></div>
+	<div style="padding-bottom:15px;"><div  style="position:relative;"><a class=menu_item href=/format?f=HIGH>HIGHLANDER</a></div></div>
+	<div style="padding-bottom:15px;"><div  style="position:relative;"><a class=menu_item href=/format?f=CHL>CANADIAN HIGHLANDER</a></div></div>
+	<div onclick="EffOther();" style="cursor:pointer;" class=S12>close</div>
+	</div>
+
+</div>
+<div id=mtga_tooltip style="visibility:hidden;width:200px;z-index:10;position: absolute;box-shadow: 0px 10px 10px #666666;padding:2px;background:white;border: 1px white solid;">
+
+	<div id=mtga_tooltip_content style="padding:3px;" align=center>
+	<div style="padding-bottom:15px;"><div  style="position:relative;"><a class=menu_item href=/format?f=EXP>EXPLORER</a></div></div>
+	<div style="padding-bottom:15px;"><div  style="position:relative;"><a class=menu_item href=/format?f=HI>HISTORIC</a></div></div>
+	<div style="padding-bottom:15px;"><div  style="position:relative;"><a class=menu_item href=/format?f=ALCH>ALCHEMY</a></div></div>
+	<div onclick="EffMTGA();" style="cursor:pointer;" class=S12>close</div>
+	</div>
+
+</div>
+<div style="display:flex;justify-content:space-evenly;align-items:center;flex-wrap:wrap;">
+  <div>
+    <div><a href=/index><img style="width:250px;" src=/graph/title.png></a></div>
+    <div class=G16 style="margin-top:5px;">netdecking with the stars</div>
+    
+  </div> 	
+  <div>
+    <div style="width:728px;height:90px;overflow:hidden;">
+<!-- Yieldlove AdTag - mtgtop8.com_d_728x90_1 -->
+<div id='div-gpt-ad-1407836193899-0'>
+  <script type='text/javascript'>
+    googletag.cmd.push(function() {
+      googletag.defineSlot('/53015287,22663084435/mtgtop8.com_d_728x90_1', [728, 90], 'div-gpt-ad-1407836193899-0').addService(googletag.pubads());
+      googletag.display('div-gpt-ad-1407836193899-0');
+    });
+  </script>
+</div></div></td>
+  </div>
+</div>
+
+<div style="position:relative;">
+<div style="margin:5px 0px 5px 0px;display:flex;justify-content:space-evenly;align-items:center;">
+<div  style="position:relative;width:160px;"><a class=menu_item href=/format?f=ST>STANDARD</a></div><div  style="position:relative;width:160px;"><a class=menu_item href=/format?f=PI>PIONEER</a></div><div  style="position:relative;width:160px;"><a class=menu_item href=/format?f=MO>MODERN</a></div><div  style="position:relative;width:160px;"><a class=menu_item href=/format?f=LE>LEGACY</a></div><div  style="position:relative;width:160px;"><a class=menu_item href=/format?f=VI>VINTAGE</a></div><div id=mtga_div onclick="AffMTGA('');" style="cursor:pointer;width:160px;"><a class=menu_item>MTG <img src=/graph/online/mtga.png>rena</a></div><div  style="position:relative;width:160px;"><a class=menu_item href=search>SEARCH</a></div>
+</div>
+<div style="margin:0px 0px 5px 0px;display:flex;justify-content:space-evenly;align-items:center;">
+<div  style="position:relative;width:160px;"><a class=menu_item href=/format?f=PAU>PAUPER</a></div><div  style="position:relative;width:160px;"><a class=menu_item href=/format?f=cEDH>cEDH</a></div><div  style="position:relative;width:160px;"><a class=menu_item_14 href=/format?f=EDH>DUEL COMMANDER</a></div><div  style="position:relative;width:160px;"><a class=menu_item href=/format?f=PREM>PREMODERN</a></div><div style="position:relative;width:160px;"><a class=menu_item_chosen href=format_limited>LIMITED<div class=c_tl></div><div class=c_tr></div><div class=c_bl></div><div class=c_br></div></a><img style="display:inline-block;height:18px;vertical-align:-12%;" src=/graph/symbols/fdn-c.png></div><div id=other_div onclick="AffOther('');" style="cursor:pointer;width:160px;"><a class=menu_item>OTHER</a></div><div  style="position:relative;width:160px;"><a class=menu_item href=submit>SUBMIT</a></div>
+</div>
+<div style="position:absolute;top:8px;right:180px;display:block;"><img src=/graph/star.png></div><div style="position:absolute;top:37px;right:180px;display:block;"><img src=/graph/star.png></div>
+</div>
+<script> 
+
+
+var ref
+var x
+var y
+var ydec=0;
+var timereff=0
+
+function MAJCoords(evt){
+	x=evt.clientX
+	y=evt.clientY
+	return false;	
+}
+
+
+function Aff(ref){
+
+ 	if (document.documentElement && document.documentElement.scrollTop) {
+		theTop = document.documentElement.scrollTop
+	}
+	else if (document.body) {
+		theTop = document.body.scrollTop
+	}
+
+	ydec=y-200;
+	
+
+	
+	document.getElementById("card_"+ref).style.left=(x+120)+"px";
+	document.getElementById("card_"+ref).style.top=(theTop+ydec)+"px";
+	document.getElementById("card_"+ref).style.visibility="visible";
+	
+	
+
+}
+
+function Eff(ref){
+	document.getElementById("card_"+ref).style.visibility="hidden";
+}
+
+
+
+function ToggleMetaList(list){
+	if(document.getElementById("metas_list_"+list).style.maxHeight=="0px"){
+		document.getElementById("metas_list_"+list).style.maxHeight="600px";
+		document.getElementById("expand_img_"+list).src="/graph/shrink.png";
+	}
+	else{
+		document.getElementById("metas_list_"+list).style.maxHeight="0px";
+		document.getElementById("expand_img_"+list).src="/graph/expand.png";
+	}
+}
+</script><div id=card_fdn262 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn262 src=https://www.mtgtop8.com/pics/fdn/262.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn192 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn192 src=https://www.mtgtop8.com/pics/fdn/192.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn235 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn235 src=https://www.mtgtop8.com/pics/fdn/235.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn012 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn012 src=https://www.mtgtop8.com/pics/fdn/012.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn071 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn071 src=https://www.mtgtop8.com/pics/fdn/071.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn020 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn020 src=https://www.mtgtop8.com/pics/fdn/020.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn142 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn142 src=https://www.mtgtop8.com/pics/fdn/142.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn016 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn016 src=https://www.mtgtop8.com/pics/fdn/016.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn062 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn062 src=https://www.mtgtop8.com/pics/fdn/062.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn172 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn172 src=https://www.mtgtop8.com/pics/fdn/172.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn004 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn004 src=https://www.mtgtop8.com/pics/fdn/004.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn038 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn038 src=https://www.mtgtop8.com/pics/fdn/038.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn104 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn104 src=https://www.mtgtop8.com/pics/fdn/104.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn105 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn105 src=https://www.mtgtop8.com/pics/fdn/105.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn136 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn136 src=https://www.mtgtop8.com/pics/fdn/136.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn188 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn188 src=https://www.mtgtop8.com/pics/fdn/188.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn047 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn047 src=https://www.mtgtop8.com/pics/fdn/047.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn050 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn050 src=https://www.mtgtop8.com/pics/fdn/050.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn025 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn025 src=https://www.mtgtop8.com/pics/fdn/025.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn073 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn073 src=https://www.mtgtop8.com/pics/fdn/073.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn106 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn106 src=https://www.mtgtop8.com/pics/fdn/106.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn112 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn112 src=https://www.mtgtop8.com/pics/fdn/112.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn119 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn119 src=https://www.mtgtop8.com/pics/fdn/119.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn077 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn077 src=https://www.mtgtop8.com/pics/fdn/077.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn113 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn113 src=https://www.mtgtop8.com/pics/fdn/113.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn133 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn133 src=https://www.mtgtop8.com/pics/fdn/133.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn040 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn040 src=https://www.mtgtop8.com/pics/fdn/040.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn054 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn054 src=https://www.mtgtop8.com/pics/fdn/054.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn115 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn115 src=https://www.mtgtop8.com/pics/fdn/115.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn132 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn132 src=https://www.mtgtop8.com/pics/fdn/132.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn001 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn001 src=https://www.mtgtop8.com/pics/fdn/001.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn027 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn027 src=https://www.mtgtop8.com/pics/fdn/027.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn126 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn126 src=https://www.mtgtop8.com/pics/fdn/126.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn051 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn051 src=https://www.mtgtop8.com/pics/fdn/051.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn081 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn081 src=https://www.mtgtop8.com/pics/fdn/081.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn097 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn097 src=https://www.mtgtop8.com/pics/fdn/097.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn134 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn134 src=https://www.mtgtop8.com/pics/fdn/134.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn176 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn176 src=https://www.mtgtop8.com/pics/fdn/176.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn183 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn183 src=https://www.mtgtop8.com/pics/fdn/183.jpg></td></tr>
+	</table>
+	</div></div> <div id=card_fdn111 style="visibility:hidden;z-index:15;position: absolute;">
+	<div style="display:inline-block;">
+	<table width=234 height=326 border=0 cellspacing=0 cellpadding=0 background=graph/borders/fondN.png>
+	  <tr><td width=234  align=center valign=middle><img id=pic_fdn111 src=https://www.mtgtop8.com/pics/fdn/111.jpg></td></tr>
+	</table>
+	</div></div> 
+<div style="display:flex;align-items:center;justify-content:center;">
+  <div style="width:400px;padding:10px;" class=S16>mtgtop8.com now partners with <a target=_blank href=https://mtgarena.pro>mtgarena.pro</a> to bring you the latest data on limited.</div>
+  <div style="width:800px;"><a target=_blank href=https://mtgarena.pro><img src=/banners/banner_03.png></a></div>
+</div>
+<div class=w_title align=center>MOST PLAYED CARDS<div class=c_tl></div><div class=c_tr></div><div class=c_bl></div><div class=c_br></div></div>
+
+<div class=G12 style="margin-top:5px;">We only use winning decks to compute the numbers below (7 wins decks on Premier and Quick drafts, 3-0 and 3-1 for Traditional).</div>
+<div class=S14 style="margin-top:5px;">Please <a href=format_limited_howto>tell more more</a> about those numbers.<div>
+<div style="display:flex;align-items:center;justify-content:center;">
+<div>
+	<div style="position:relative;width:300px;margin:10px;">
+		<div style="background:#00528b;width:100%;padding:2px;"><div style="background:white;width:100%;" align=left onclick="ToggleMetaList('sets');"><div style="padding:3px;" class=S14>Foundations</div></div></div>
+		<div id=metas_list_sets style="width:100%;max-height:0px;overflow:scroll;position:absolute;left:2px;transition:max-height 0.2s;">
+		  <div style="width:98%;border-width:0px 1px 1px 1px;border-color:#00528b;border-style:solid;" align=left><a href="?meta_m=96"><div style="padding:3px;background:#ffdd33;" class="S14">Foundations</div></a><a href="?meta_m=91"><div style="padding:3px;" class="S14 hover_tr">Duskmourn: House of Horrors</div></a><a href="?meta_m=87"><div style="padding:3px;" class="S14 hover_tr">Bloomburrow</div></a><a href="?meta_m=83"><div style="padding:3px;" class="S14 hover_tr">Modern Horizons 3</div></a><a href="?meta_m=79"><div style="padding:3px;" class="S14 hover_tr">Outlaws of Thunder Junction</div></a><a href="?meta_m=75"><div style="padding:3px;" class="S14 hover_tr">Murders at Karlov Manor</div></a><a href="?meta_m=71"><div style="padding:3px;" class="S14 hover_tr">The Lost Caverns of Ixalan</div></a><a href="?meta_m=67"><div style="padding:3px;" class="S14 hover_tr">Wilds of Eldraine</div></a><a href="?meta_m=63"><div style="padding:3px;" class="S14 hover_tr">The Lord of the Rings</div></a><a href="?meta_m=57"><div style="padding:3px;" class="S14 hover_tr">March of the Machine</div></a><a href="?meta_m=54"><div style="padding:3px;" class="S14 hover_tr">Shadows over Innistrad Remastered</div></a><a href="?meta_m=47"><div style="padding:3px;" class="S14 hover_tr">Phyrexia: All Will be One</div></a><a href="?meta_m=42"><div style="padding:3px;" class="S14 hover_tr">The Brothers' War</div></a><a href="?meta_m=38"><div style="padding:3px;" class="S14 hover_tr">Dominaria United</div></a><a href="?meta_m=34"><div style="padding:3px;" class="S14 hover_tr">Alchemy Horizons: Baldur's Gate</div></a><a href="?meta_m=30"><div style="padding:3px;" class="S14 hover_tr">Streets of New Capenna</div></a><a href="?meta_m=22"><div style="padding:3px;" class="S14 hover_tr">Kamigawa Neon Dynasty</div></a><a href="?meta_m=25"><div style="padding:3px;" class="S14 hover_tr">Double Feature</div></a><a href="?meta_m=14"><div style="padding:3px;" class="S14 hover_tr">Crimson Vow</div></a><a href="?meta_m=3"><div style="padding:3px;" class="S14 hover_tr">Midnight Hunt</div></a><a href="?meta_m=2"><div style="padding:3px;" class="S14 hover_tr">Adventures in Forgotten Realms</div></a><a href="?meta_m=1"><div style="padding:3px;" class="S14 hover_tr">Strixhaven</div></a><a href="?meta_m=20"><div style="padding:3px;" class="S14 hover_tr">Kaldheim</div></a><a href="?meta_m=17"><div style="padding:3px;" class="S14 hover_tr">Zendikar Rising</div></a></div>
+		</div>
+		<div style="position:absolute;z-index:11;top:5px;right:10px;" onclick="ToggleMetaList('sets');"><img id=expand_img_sets src=/graph/expand.png style="height:15px;"></div>
+	</div></div>
+<div>
+	<div style="position:relative;width:200px;margin:10px;">
+		<div style="background:#00528b;width:100%;padding:2px;"><div style="background:white;width:100%;" align=left onclick="ToggleMetaList('metas');"><div style="padding:3px;" class=S14>Premier Draft</div></div></div>
+		<div id=metas_list_metas style="width:100%;max-height:0px;overflow:scroll;position:absolute;left:2px;transition:max-height 0.2s;">
+		  <div style="width:98%;border-width:0px 1px 1px 1px;border-color:#00528b;border-style:solid;" align=left><a href="?meta=97"><div style="padding:3px;background:#ffdd33;" class="S14">Premier Draft</div></a><a href="?meta=98"><div style="padding:3px;" class="S14 hover_tr">Traditional Draft</div></a></div>
+		</div>
+		<div style="position:absolute;z-index:11;top:5px;right:10px;" onclick="ToggleMetaList('metas');"><img id=expand_img_metas src=/graph/expand.png style="height:15px;"></div>
+	</div></div>
+<div class=S14><div style="width:150px;margin:10px;" class=14>43 decks</div></div>
+
+</div>
+<div>
+
+	<div style="display:flex;align-items:center;justify-content:center;">
+
+	  <div class=S14 style="margin-right:30px;">Basic Lands</div>
+		<div style="margin-right:10px;"><img src=graph/manas/W.png></div><div style="margin-right:30px;">24 %</div><div style="margin-right:10px;"><img src=graph/manas/U.png></div><div style="margin-right:30px;">21.2 %</div><div style="margin-right:10px;"><img src=graph/manas/B.png></div><div style="margin-right:30px;">15.6 %</div><div style="margin-right:10px;"><img src=graph/manas/R.png></div><div style="margin-right:30px;">18.4 %</div><div style="margin-right:10px;"><img src=graph/manas/G.png></div><div style="margin-right:30px;">20.8 %</div>
+	</div>
+		<table class=Stable width=100%>
+		  <tr>
+		    <td class=S14 align=center width=50% valign=top>
+		       
+	<div align=center><a href=topcards_limited?meta=97&card_rarity=C>Common cards</a> &mdash; 56.2 %</div>
+	<table width=98% border=0 cellpadding=0 cellspacing=0>
+		
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn262')" onmouseout="Eff('fdn262')">Evolving Wilds</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.8</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn192')" onmouseout="Eff('fdn192')">Burst Lightning</div></td>
+		  <td width=20% align=right class=S10>96.2 %</td>
+		  <td  width=20% align=center class=V12>x 1.7</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn235')" onmouseout="Eff('fdn235')">Wary Thespian</div></td>
+		  <td width=20% align=right class=S10>93.3 %</td>
+		  <td  width=20% align=center class=V12>x 1.7</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn012')" onmouseout="Eff('fdn012')">Felidar Savior</div></td>
+		  <td width=20% align=right class=S10>92.9 %</td>
+		  <td  width=20% align=center class=V12>x 1.7</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn071')" onmouseout="Eff('fdn071')">Stab</div></td>
+		  <td width=20% align=right class=S10>92.9 %</td>
+		  <td  width=20% align=center class=V12>x 1.7</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn020')" onmouseout="Eff('fdn020')">Luminous Rebuke</div></td>
+		  <td width=20% align=right class=S10>92.3 %</td>
+		  <td  width=20% align=center class=V12>x 1.6</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn142')" onmouseout="Eff('fdn142')">Healer's Hawk</div></td>
+		  <td width=20% align=right class=S10>92.3 %</td>
+		  <td  width=20% align=center class=V12>x 1.6</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn016')" onmouseout="Eff('fdn016')">Helpful Hunter</div></td>
+		  <td width=20% align=right class=S10>90.9 %</td>
+		  <td  width=20% align=center class=V12>x 1.6</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn062')" onmouseout="Eff('fdn062')">Hungry Ghoul</div></td>
+		  <td width=20% align=right class=S10>90.9 %</td>
+		  <td  width=20% align=center class=V12>x 1.6</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn172')" onmouseout="Eff('fdn172')">Eaten Alive</div></td>
+		  <td width=20% align=right class=S10>90.9 %</td>
+		  <td  width=20% align=center class=V12>x 1.6</td>
+		</tr>
+		<tr><td colspan=2></td><td colspan=3 align=center><a href=topcards_limited?meta=97&card_rarity=C>see more</a></td></tr>
+	</table>
+		       
+	<div align=center><a href=topcards_limited?meta=97&card_rarity=U>Uncommon cards</a> &mdash; 65.4 %</div>
+	<table width=98% border=0 cellpadding=0 cellspacing=0>
+		
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn004')" onmouseout="Eff('fdn004')">Cat Collector</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.5</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn038')" onmouseout="Eff('fdn038')">Faebloom Trick</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.5</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn104')" onmouseout="Eff('fdn104')">Elvish Regrower</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.5</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn105')" onmouseout="Eff('fdn105')">Felling Blow</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.5</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn136')" onmouseout="Eff('fdn136')">Angel of Finality</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.5</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn188')" onmouseout="Eff('fdn188')">Abrade</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.5</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn047')" onmouseout="Eff('fdn047')">Mischievous Mystic</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.5</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn050')" onmouseout="Eff('fdn050')">Skyship Buccaneer</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.5</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn025')" onmouseout="Eff('fdn025')">Sun-Blessed Healer</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.5</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn073')" onmouseout="Eff('fdn073')">Tragic Banshee</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.5</td>
+		</tr>
+		<tr><td colspan=2></td><td colspan=3 align=center><a href=topcards_limited?meta=97&card_rarity=U>see more</a></td></tr>
+	</table>
+		    </td>
+		    <td class=S14 align=center width=50% valign=top>
+		       
+	<div align=center><a href=topcards_limited?meta=97&card_rarity=R>Rare cards</a> &mdash; 78.8 %</div>
+	<table width=98% border=0 cellpadding=0 cellspacing=0>
+		
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn106')" onmouseout="Eff('fdn106')">Loot, Exuberant Explorer</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.3</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn112')" onmouseout="Eff('fdn112')">Spinner of Souls</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.3</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn119')" onmouseout="Eff('fdn119')">Elenda, Saint of Dusk</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.3</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn077')" onmouseout="Eff('fdn077')">Zul Ashur, Lich Lord</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.3</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn113')" onmouseout="Eff('fdn113')">Sylvan Scavenging</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.3</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn133')" onmouseout="Eff('fdn133')">Soulstone Sanctuary</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.3</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn040')" onmouseout="Eff('fdn040')">High Fae Trickster</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.3</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn054')" onmouseout="Eff('fdn054')">Abyssal Harvester</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.3</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn115')" onmouseout="Eff('fdn115')">Alesha, Who Laughs at Fate</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.3</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn132')" onmouseout="Eff('fdn132')">Scrawling Crawler</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.3</td>
+		</tr>
+		<tr><td colspan=2></td><td colspan=3 align=center><a href=topcards_limited?meta=97&card_rarity=R>see more</a></td></tr>
+	</table>
+		       
+	<div align=center><a href=topcards_limited?meta=97&card_rarity=M>Mythic cards</a> &mdash; 70 %</div>
+	<table width=98% border=0 cellpadding=0 cellspacing=0>
+		
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn001')" onmouseout="Eff('fdn001')">Sire of Seven Deaths</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.4</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn027')" onmouseout="Eff('fdn027')">Valkyrie's Call</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.4</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn126')" onmouseout="Eff('fdn126')">Zimone, Paradox Sculptor</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.4</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn051')" onmouseout="Eff('fdn051')">Sphinx of Forgotten Lore</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.4</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn081')" onmouseout="Eff('fdn081')">Chandra, Flameshaper</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.4</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn097')" onmouseout="Eff('fdn097')">Twinflame Tyrant</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.4</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn134')" onmouseout="Eff('fdn134')">Ajani, Caller of the Pride</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.4</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn176')" onmouseout="Eff('fdn176')">Liliana, Dreadhorde General</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.4</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn183')" onmouseout="Eff('fdn183')">Rise of the Dark Realms</div></td>
+		  <td width=20% align=right class=S10>100.0 %</td>
+		  <td  width=20% align=center class=V12>x 1.4</td>
+		</tr>
+		<tr>
+		  <td width=60%><div class=L14 onclick="Aff('fdn111')" onmouseout="Eff('fdn111')">Quilled Greatwurm</div></td>
+		  <td width=20% align=right class=S10>66.7 %</td>
+		  <td  width=20% align=center class=R12>&divide; 1</td>
+		</tr>
+		<tr><td colspan=2></td><td colspan=3 align=center><a href=topcards_limited?meta=97&card_rarity=M>see more</a></td></tr>
+	</table>
+		    </td>
+		  </tr>
+		</table>
+</div>
+<div class=w_title style="margin-top:20px;">
+<div align=center>
+<a class=white href=/privacy>Privacy Policy</a>
+
+<div style="padding:5px;" valign=top class=W10 align=center>
+The information presented on this site about Magic: The Gathering, both literal and graphical, is copyrighted by Wizards of the Coast.
+This website is not produced, endorsed, supported, or affiliated with Wizards of the Coast..
+<div class=c_tl></div><div class=c_tr></div><div class=c_bl></div><div class=c_br></div>
+</div>
+</div>
+</div></div>
+	</div></body>
+	</html>

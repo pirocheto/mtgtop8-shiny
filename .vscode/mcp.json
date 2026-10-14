@@ -1,0 +1,11 @@
+{
+    // Same server as the repository's .mcp.json, in the shape VS Code reads.
+    // Editing one and not the other is how the two drift apart.
+    "servers": {
+        "playwright": {
+            "type": "stdio",
+            "command": "npx",
+            "args": ["-y", "@playwright/mcp@latest", "--isolated"]
+        }
+    }
+}

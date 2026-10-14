@@ -1,0 +1,25 @@
+# Checks every push and pull request: lint, types, the parsers' unit tests
+# and a production build. The end-to-end tests stay local (see the README):
+# they need a browser, and the unit tests already cover the parsers on saved
+# pages.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build

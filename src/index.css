@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+/* One light theme, whatever the OS setting. The palette lives in tokens so
+   components never hard-code a colour. */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: #f6f7f9;
+  --color-surface: #ffffff;
+  --color-surface-2: #eaedf1;
+  --color-line: #e2e5ec;
+  --color-fg: #141821;
+  --color-muted: #5d667a;
+  /* mtgtop8's own three: orange for headings and figures ("19 LANDS", prices),
+     yellow for what is selected (its .chosen_tr and .Nav_cur, with blue text),
+     and blue for links. */
+  --color-accent: #d29a00;
+  --color-highlight: #ffdd33;
+  --color-highlight-fg: #00528b;
+  --color-link: #00528b;
+  /* The tag of events played online elsewhere than MTGO. */
+  --color-online: #7c3aed;
+  /* The events' stars, in the logo's yellow rather than the headings' orange. */
+  --color-star: #ffc800;
+  --color-up: #059669;
+  --color-down: #dc2626;
+  /* The title bars over each block, after mtgtop8's own blue ones. */
+  --color-bar: #00528b;
+  --color-bar-fg: #ffffff;
+
+  --color-mana-w: #d8c78c;
+  --color-mana-u: #3b82f6;
+  --color-mana-b: #7c6a8c;
+  --color-mana-r: #ef4444;
+  --color-mana-g: #22a05a;
+  --color-mana-c: #9ca3af;
+}
+
+/* Native controls (selects, scrollbars) drawn light too. */
+html {
+  color-scheme: light;
+}
+
+/* Thin, discreet scrollbars, for the lists that scroll inside the page
+   (standings, long dropdowns). */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+
+body {
+  @apply bg-bg font-sans text-fg antialiased;
+}
+
+/* Tabular figures keep percentages and ranks aligned in columns. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The loading bar's run, from off the left edge to off the right. */
+@keyframes fetching {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}

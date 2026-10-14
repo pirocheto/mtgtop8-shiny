@@ -1,0 +1,17 @@
+.git/
+node_modules/
+dist/
+
+# The test artefacts, but NOT e2e/ itself, nor playwright.config.ts: they are
+# referenced by tsconfig.e2e.json, which the build's `tsc -b` resolves, and
+# excluding them fails the build with "No inputs were found in config file".
+# They cost a few kilobytes in the builder stage and reach no image: the
+# runtime copies dist/ alone.
+playwright-report/
+test-results/
+.playwright-mcp/
+
+.env
+.env.*
+!.env.production
+.DS_Store

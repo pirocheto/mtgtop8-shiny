@@ -1,0 +1,56 @@
+# Quality checks run on every commit.
+# Enable once per clone (does nothing otherwise):
+#   pre-commit install
+#
+# There is no Python in this repository, so pre-commit itself is the one Python
+# tool here: install it with `pipx install pre-commit`, or `uv tool install
+# pre-commit`. The other templates get it through their own uv environment.
+
+# Makes the plain `pre-commit install` also cover the commit-msg stage,
+# where the Conventional Commits check runs.
+default_install_hook_types: [pre-commit, commit-msg]
+
+# Build output, dependencies and test artefacts are never worth checking.
+exclude: ^(node_modules|dist|playwright-report|test-results)/
+
+repos:
+  # ── Frontend ─────────────────────────────────────────────────────────────────
+  - repo: local
+    hooks:
+      - id: oxlint
+        name: oxlint
+        entry: npm run lint
+        language: system
+        files: \.(ts|tsx|js|jsx)$
+        pass_filenames: false
+
+      - id: tsc
+        name: tsc --build
+        entry: npm run typecheck
+        language: system
+        files: \.(ts|tsx|json)$
+        pass_filenames: false
+
+  # ── Shared hygiene ───────────────────────────────────────────────────────────
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.0.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: [feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-yaml
+      # .vscode/ holds JSONC: VS Code allows comments and trailing commas
+      # there, a strict JSON parser does not.
+      - id: check-json
+        exclude: ^\.vscode/
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+        args: [--fix=lf]

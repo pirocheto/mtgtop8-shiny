@@ -1,0 +1,26 @@
+# Default BASE_PATH to the prefix the bundle was built for.
+#
+# The SPA's own copy of the prefix is baked into its asset URLs at build time
+# and cannot be changed afterwards; nginx takes its copy at run time. When the
+# two disagree, nginx answers the bundle's asset requests with index.html --
+# HTTP 200, content type text/html, blank page, nothing in the logs. Defaulting
+# to the build's own value is what keeps a plain `docker run` from landing
+# there.
+#
+# `.envsh`, not `.sh`: the nginx entrypoint SOURCES the former and merely runs
+# the latter, and an export from a subshell would never reach the envsubst step
+# that reads it. Numbered 10- so it runs before that step (20-).
+#
+# No `set -eu` for the same reason: this is sourced into the entrypoint's own
+# shell, where it would outlive this file and change how the rest of the
+# startup behaves.
+#
+# An explicit BASE_PATH always wins, including an explicitly empty one: serving
+# at the root of a domain is legitimate, and the bundle has to have been built
+# for it too.
+
+if [ -z "${BASE_PATH+x}" ] && [ -f /etc/nginx/base-path ]; then
+    BASE_PATH="$(cat /etc/nginx/base-path)"
+    export BASE_PATH
+    echo "$0: BASE_PATH defaulted to '${BASE_PATH}' (the prefix this bundle was built for)"
+fi
