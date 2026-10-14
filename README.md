@@ -9,7 +9,19 @@
 ![Vite](https://img.shields.io/badge/Vite-8-blue.svg?style=for-the-badge&logo=vite&logoColor=white)
 ![nginx](https://img.shields.io/badge/nginx-1.29-blue.svg?style=for-the-badge&logo=nginx&logoColor=white)
 
+**[mtgtop8-shiny.vercel.app](https://mtgtop8-shiny.vercel.app)**
+
 </div>
+
+---
+
+## Why
+
+mtgtop8 is a reference for competitive Magic, but its interface has aged. I built this site to modernize it while keeping the DNA of the original: the same pages, the same data and the same way of browsing from a format to its metagame, its events and their decklists. Only the presentation changes, with a cleaner, responsive layout.
+
+The other goal is speed. The site is a single-page app: moving between pages does not reload the whole document, and the data already fetched is kept in the browser for a day, so going back to a page you have seen is instant, even after closing the tab.
+
+This is an unofficial project, made with a lot of respect for the work behind mtgtop8. If you run the original site and come across this, I'd be glad to talk about it: feel free to [open an issue](https://github.com/pirocheto/mtgtop8-shiny/issues).
 
 ---
 
