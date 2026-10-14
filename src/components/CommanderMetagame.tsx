@@ -106,6 +106,7 @@ const CommanderList = memo(function CommanderList({
   format,
   period,
   current,
+  capped,
 }: {
   shares: CommanderShare[]
   decks: CommanderDeck[]
@@ -113,11 +114,12 @@ const CommanderList = memo(function CommanderList({
   period: string
   /** The commander on display, on its archetype page, highlighted. */
   current?: string
+  capped: boolean
 }) {
   // On a phone, the leaders only until asked, as the breakdown of the other
   // formats does: the whole list would bury the rest of the page.
   const [expanded, setExpanded] = useState(() => shares.findIndex((share) => share.archetypeId === current) >= PHONE_SHOWN)
-  const hidden = shares.length - PHONE_SHOWN
+  const hidden = capped ? shares.length - PHONE_SHOWN : 0
   return (
     <>
       {shares.length === 0 && decks.length === 0 && <Empty>No decks match.</Empty>}
@@ -125,7 +127,7 @@ const CommanderList = memo(function CommanderList({
       {/* A thin gap between rows, so the thumbnails do not run into one another. */}
       <ul className="flex flex-col gap-0.5">
         {shares.map((share, i) => (
-          <li key={share.archetypeId} className={!expanded && i >= PHONE_SHOWN ? 'max-sm:hidden' : undefined}>
+          <li key={share.archetypeId} className={capped && !expanded && i >= PHONE_SHOWN ? 'max-sm:hidden' : undefined}>
             <Link
               to={`/archetype/${share.archetypeId}?f=${format}&meta=${period}`}
               className={cx(
@@ -181,11 +183,14 @@ export function CommanderMetagame({
   format,
   period,
   current,
+  capped = true,
 }: {
   format: string
   period: string
   /** On an archetype page, the commander on display. */
   current?: string
+  /** The leaders only on a phone, until asked; not in a drawer, where it is all there is. */
+  capped?: boolean
 }) {
   const [show, setShow] = useState<CommanderQuery['show']>('pop')
   const [colors, setColors] = useState('')
@@ -251,7 +256,7 @@ export function CommanderMetagame({
             )}
           </p>
 
-          <CommanderList shares={data.shares} decks={data.decks} format={format} period={period} current={current} />
+          <CommanderList shares={data.shares} decks={data.decks} format={format} period={period} current={current} capped={capped} />
 
           {data.decks.length > 0 && (
             <Pagination

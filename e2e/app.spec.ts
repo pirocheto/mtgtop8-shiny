@@ -125,42 +125,49 @@ test('says so when mtgtop8 cannot be reached', async ({ page }) => {
   await expect(page.getByText("Couldn't load this from mtgtop8.")).toBeVisible()
 })
 
-// On a phone, what the page is for comes first, and a tapped card opens where
-// it can be seen.
+// On a phone, what the page is for comes first, the side columns open in
+// drawers, and a tapped card opens where it can be seen.
 test.describe('on a phone', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true })
 
-  test('an event shows its deck before its standings, and a tapped card over it', async ({ page }) => {
+  test('an event shows its deck, and its standings in a drawer', async ({ page }) => {
     await mockMtgtop8(page)
     await page.goto('/event/92202')
 
-    const deck = page.getByText('19 LANDS (24)')
-    const standings = page.getByRole('heading', { name: 'Standings · 32' })
-    await expect(deck).toBeInViewport()
-    await expect(standings).toBeVisible()
-    expect((await deck.boundingBox())!.y).toBeLessThan((await standings.boundingBox())!.y)
-
+    await expect(page.getByText('19 LANDS (24)')).toBeInViewport()
     await page.getByRole('button', { name: /Fatal Push/ }).tap()
     await expect(page.getByRole('dialog', { name: 'Fatal Push' })).toBeInViewport()
+    await page.keyboard.press('Escape')
+
+    await page.getByRole('button', { name: /Standings/ }).tap()
+    const standings = page.getByRole('dialog', { name: 'Standings · 32' })
+    await expect(standings).toBeInViewport()
+    await standings.getByRole('link', { name: /Instant Reanimator/ }).first().tap()
+    await expect(standings).toBeHidden()
+    await expect(page).toHaveURL(/\/deck\//)
   })
 
-  test('an archetype shows its decks before the breakdown', async ({ page }) => {
+  test('an archetype shows its decks, and the breakdown in a drawer', async ({ page }) => {
     await mockMtgtop8(page)
     await page.goto('/archetype/1?f=MO')
 
     await expect(page.getByRole('heading', { name: /decks$/i })).toBeInViewport()
+    await page.getByRole('button', { name: 'Metagame', exact: true }).tap()
+    const drawer = page.getByRole('dialog', { name: 'Metagame breakdown' })
+    await expect(drawer.getByRole('heading', { name: /^aggro/i })).toBeInViewport()
   })
 
-  test('a search folds its form away to show the results', async ({ page }) => {
+  test('a search is made from a drawer, which closes on the results', async ({ page }) => {
     await mockMtgtop8(page)
     await page.goto('/search')
 
-    await page.getByRole('textbox', { name: 'Cards' }).fill('Solitude')
-    await page.getByRole('button', { name: 'Search', exact: true }).click()
+    await page.getByRole('button', { name: /Search filters/ }).tap()
+    const drawer = page.getByRole('dialog', { name: 'Search filters' })
+    await drawer.getByRole('textbox', { name: 'Cards' }).fill('Solitude')
+    await drawer.getByRole('button', { name: 'Search', exact: true }).tap()
 
-    await expect(page.getByRole('textbox', { name: 'Cards' })).toBeHidden()
+    await expect(page).toHaveURL(/cards=Solitude/)
+    await expect(drawer).toBeHidden()
     await expect(page.getByRole('heading', { name: /^\d[\d,]* decks? matching$/ })).toBeInViewport()
-    await page.getByRole('button', { name: /Search filters/ }).click()
-    await expect(page.getByRole('textbox', { name: 'Cards' })).toHaveValue('Solitude')
   })
 })

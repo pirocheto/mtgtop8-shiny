@@ -229,19 +229,22 @@ export const MetagameBreakdown = memo(function MetagameBreakdown({
   formatCode,
   period,
   current,
+  capped = true,
 }: {
   categories: MetagameCategory[]
   formatCode: string
   period?: string
   /** The archetype on display, highlighted as the site does. */
   current?: string
+  /** Each category's leaders only on a phone; not where it is all there is, a drawer. */
+  capped?: boolean
 }) {
   // Opened from the start when the archetype on display would be hidden.
   const [expanded, setExpanded] = useState(() =>
     categories.some((category) => category.archetypes.findIndex((archetype) => archetype.id === current) >= PHONE_SHOWN),
   )
   if (!categories.length) return <Empty>No metagame data for this period.</Empty>
-  const hidden = categories.reduce((sum, category) => sum + Math.max(0, category.archetypes.length - PHONE_SHOWN), 0)
+  const hidden = !capped ? 0 : categories.reduce((sum, category) => sum + Math.max(0, category.archetypes.length - PHONE_SHOWN), 0)
   return (
     <div className="flex flex-col gap-5">
       {categories.map((category) => (
@@ -257,7 +260,7 @@ export const MetagameBreakdown = memo(function MetagameBreakdown({
                 formatCode={formatCode}
                 period={period}
                 current={archetype.id === current}
-                phoneHidden={!expanded && i >= PHONE_SHOWN}
+                phoneHidden={capped && !expanded && i >= PHONE_SHOWN}
               />
             ))}
           </ul>

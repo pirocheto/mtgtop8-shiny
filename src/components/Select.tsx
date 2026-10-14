@@ -200,7 +200,9 @@ export function Select({
               )
             })}
           </ul>,
-          document.body,
+          // In a modal dialog (a drawer), drawn inside it: the dialog sits in
+          // the top layer, over anything the body holds.
+          button.current?.closest('dialog') ?? document.body,
         )}
     </div>
   )
