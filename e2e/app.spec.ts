@@ -48,7 +48,8 @@ test('an event shows its standings and the winning deck', async ({ page }) => {
   await page.goto('/event/92202')
 
   await expect(page.getByRole('heading', { name: 'Regional Championship - CAMS - T13' })).toBeVisible()
-  await expect(page.getByText('184 players - 10/10/26')).toBeVisible()
+  // Written twice, in the column and in a line for narrower screens: one shows.
+  await expect(page.getByText('184 players - 10/10/26').filter({ visible: true })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Standings · 32' })).toBeAttached()
   await expect(page.getByText('19 LANDS (24)')).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Esper Blink' })).toBeVisible()
@@ -122,4 +123,44 @@ test('says so when mtgtop8 cannot be reached', async ({ page }) => {
   await page.goto('/format/MO')
 
   await expect(page.getByText("Couldn't load this from mtgtop8.")).toBeVisible()
+})
+
+// On a phone, what the page is for comes first, and a tapped card opens where
+// it can be seen.
+test.describe('on a phone', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true })
+
+  test('an event shows its deck before its standings, and a tapped card over it', async ({ page }) => {
+    await mockMtgtop8(page)
+    await page.goto('/event/92202')
+
+    const deck = page.getByText('19 LANDS (24)')
+    const standings = page.getByRole('heading', { name: 'Standings · 32' })
+    await expect(deck).toBeInViewport()
+    await expect(standings).toBeVisible()
+    expect((await deck.boundingBox())!.y).toBeLessThan((await standings.boundingBox())!.y)
+
+    await page.getByRole('button', { name: /Fatal Push/ }).tap()
+    await expect(page.getByRole('dialog', { name: 'Fatal Push' })).toBeInViewport()
+  })
+
+  test('an archetype shows its decks before the breakdown', async ({ page }) => {
+    await mockMtgtop8(page)
+    await page.goto('/archetype/1?f=MO')
+
+    await expect(page.getByRole('heading', { name: /decks$/i })).toBeInViewport()
+  })
+
+  test('a search folds its form away to show the results', async ({ page }) => {
+    await mockMtgtop8(page)
+    await page.goto('/search')
+
+    await page.getByRole('textbox', { name: 'Cards' }).fill('Solitude')
+    await page.getByRole('button', { name: 'Search', exact: true }).click()
+
+    await expect(page.getByRole('textbox', { name: 'Cards' })).toBeHidden()
+    await expect(page.getByRole('heading', { name: /^\d[\d,]* decks? matching$/ })).toBeInViewport()
+    await page.getByRole('button', { name: /Search filters/ }).click()
+    await expect(page.getByRole('textbox', { name: 'Cards' })).toHaveValue('Solitude')
+  })
 })

@@ -83,14 +83,20 @@ export function SearchPage() {
 
   const choose = (field: Field) => (value: string) => set(field)({ target: { value } })
 
+  // On a phone the form folds away once a search is made, so the decks it
+  // found come first; a blank page opens on the form, there to be filled.
+  const [formOpen, setFormOpen] = useState(() => !FIELDS.some((field) => params.get(field)))
+
   const submit = (event: FormEvent) => {
     event.preventDefault()
     setParams(Object.entries(form).filter(([, value]) => value))
+    setFormOpen(false)
   }
 
   const archetypes = form.format ? (options.data?.archetypes[form.format] ?? []) : []
 
   const total = results.data?.total
+  const filled = FIELDS.filter((field) => submitted[field] && !(field === 'board' && submitted[field] === 'main')).length
 
   // Laid out as the site's search: the form in a narrow left column, the
   // decks it matches on the right.
@@ -98,7 +104,32 @@ export function SearchPage() {
     <div className="grid items-start gap-4 lg:grid-cols-[16rem_1fr]">
       <h1 className="sr-only">Search decks</h1>
 
-      <form onSubmit={submit} className="flex flex-col gap-3 rounded-xl border border-line bg-surface p-4">
+      {/* The phone's handle on the folded form, with how many fields it holds. */}
+      <button
+        type="button"
+        onClick={() => setFormOpen(!formOpen)}
+        aria-expanded={formOpen}
+        aria-controls="search-form"
+        className="flex items-center justify-between rounded-xl border border-line bg-surface px-4 py-2.5 text-sm font-semibold lg:hidden"
+      >
+        <span>
+          Search filters
+          {filled > 0 && <span className="ml-2 rounded-full bg-highlight px-2 text-xs text-highlight-fg">{filled}</span>}
+        </span>
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 16 16"
+          className={cx('size-4 text-muted transition-transform', formOpen && 'rotate-180')}
+        >
+          <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+
+      <form
+        id="search-form"
+        onSubmit={submit}
+        className={cx('flex flex-col gap-3 rounded-xl border border-line bg-surface p-4', !formOpen && 'max-lg:hidden')}
+      >
         <Field label="Event">
           <input value={form.event} onChange={set('event')} className={input} />
         </Field>
@@ -153,7 +184,7 @@ export function SearchPage() {
             aria-label="Cards"
           />
         </SelectField>
-        <fieldset className="flex flex-col gap-1 text-sm">
+        <fieldset className="grid grid-cols-2 gap-2 text-sm lg:grid-cols-1 lg:gap-1">
           <legend className="mb-1">Period</legend>
           <Field label="From">
             <input type="date" value={form.from} onChange={set('from')} className={input} />
@@ -166,11 +197,11 @@ export function SearchPage() {
           <button
             type="button"
             onClick={() => setParams({})}
-            className="rounded-md border border-line px-3 py-1.5 text-sm hover:bg-surface-2"
+            className="rounded-md border border-line px-3 py-1.5 text-sm hover:bg-surface-2 max-lg:py-2"
           >
             Reset
           </button>
-          <button type="submit" className="rounded-md bg-link px-4 py-1.5 text-sm font-semibold text-white hover:opacity-90">
+          <button type="submit" className="rounded-md bg-link px-4 py-1.5 text-sm font-semibold text-white hover:opacity-90 max-lg:flex-1 max-lg:py-2">
             Search
           </button>
         </div>

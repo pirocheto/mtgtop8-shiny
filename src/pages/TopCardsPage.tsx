@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
-import { CardPanel } from '../components/CardPanel'
+import { CardDialog, CardPanel } from '../components/CardPanel'
 import { useCardPreview } from '../components/useCardPreview'
 import { Select } from '../components/Select'
 import { Empty, ErrorState, Pagination, Panel, PeriodSelect, Spinner } from '../components/ui'
@@ -13,6 +13,7 @@ import { useQueryParams } from '../lib/useQueryParams'
 import { useSelected, useSelectionStore, type Selection } from '../lib/selection'
 import { cx } from '../lib/utils'
 import { useShowFormat } from '../lib/currentFormat'
+import { useIsWide } from '../lib/useMediaQuery'
 
 const PAGE_SIZE = 20
 
@@ -95,10 +96,22 @@ const CardTableRow = memo(function CardTableRow({
   )
 })
 
-/** The panel of the picked card; it alone follows the selection. */
-function PickedCardPanel({ cards, selection }: { cards: TopCard[]; selection: TopCardSelection }) {
+/**
+ * The panel of the picked card; it alone follows the selection. On a phone,
+ * where it would sit under the whole list, it opens over it instead.
+ */
+function PickedCardPanel({ cards, selection, wide }: { cards: TopCard[]; selection: TopCardSelection; wide: boolean }) {
   const picked = useSelected(selection, (card) => card)
   const { data: infos } = useCardInfo(cards.map((card) => ({ quantity: 1, name: card.name })))
+  if (!wide) {
+    return (
+      <CardDialog
+        card={picked && { quantity: 1, name: picked.name, cardId: picked.cardId }}
+        info={picked && infos?.get(cardKey(picked.name))}
+        onClose={() => selection.set(undefined)}
+      />
+    )
+  }
   if (!picked) return null
   return (
     <div className="lg:sticky lg:top-4 lg:self-start">
@@ -116,10 +129,13 @@ function PickedCardPanel({ cards, selection }: { cards: TopCard[]; selection: To
  * site does. Picking re-renders the two rows concerned and the panel only.
  */
 function CardsAndPanel({ cards }: { cards: TopCard[] }) {
-  const selection = useSelectionStore<TopCard | undefined>(cards[0])
+  const wide = useIsWide()
+  // On a phone, nothing picked until a card is tapped: the first one would
+  // open over the list as soon as it shows.
+  const selection = useSelectionStore<TopCard | undefined>(wide ? cards[0] : undefined)
   if (!cards.length) return <Empty>No cards for this selection.</Empty>
   return (
-    <div className="grid gap-6 px-3 pb-4 lg:grid-cols-[2fr_3fr]">
+    <div className="grid gap-6 px-1 pb-4 sm:px-3 lg:grid-cols-[2fr_3fr]">
       <table className="w-full text-sm">
         <thead>
           <tr>
@@ -134,7 +150,7 @@ function CardsAndPanel({ cards }: { cards: TopCard[] }) {
           ))}
         </tbody>
       </table>
-      <PickedCardPanel cards={cards} selection={selection} />
+      <PickedCardPanel cards={cards} selection={selection} wide={wide} />
     </div>
   )
 }
@@ -206,8 +222,8 @@ export function TopCardsPage() {
             </label>
           ))}
         </span>
-        <span className="flex flex-wrap items-center gap-2">
-          <span className="text-muted">Filter Cards</span>
+        <span className="flex flex-wrap items-center justify-center gap-2">
+          <span className="text-muted max-sm:hidden">Filter Cards</span>
           <FilterSelect label="Colour" value={color} options={COLORS} onChange={filter('color')} />
           <FilterSelect label="Type" value={type} options={TYPES} onChange={filter('type')} />
           <FilterSelect label="Rarity" value={rarity} options={RARITIES} onChange={filter('rarity')} />

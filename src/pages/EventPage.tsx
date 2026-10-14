@@ -83,6 +83,8 @@ const StandingRow = memo(function StandingRow({
 /**
  * Laid out as the site's event page: a bar with the event and the deck shown,
  * the event's details and standings in a narrow left column, the deck beside.
+ * On a phone the deck, what the page is for, comes first, right under the
+ * bar and a line of the event's details; the standings follow it.
  */
 export function EventPage() {
   const { eventId = '', deckId } = useParams()
@@ -107,18 +109,18 @@ export function EventPage() {
   return (
     <div className="flex flex-col gap-4">
       <header className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 rounded-xl bg-bar px-4 py-2 text-bar-fg">
-        <h1 className="text-lg font-bold">
+        <h1 className="font-bold sm:text-lg">
           {data.name}
           {data.location && <span className="font-normal opacity-80"> @ {data.location}</span>}
         </h1>
-        <div className="flex items-center gap-4 text-lg font-bold">
+        <div className="flex items-center gap-4 text-lg font-bold max-sm:w-full">
           {/* As in the blocks' title bars: the white spinner while the next deck comes. */}
           {deckLoading && (
             <span role="status" aria-label="Loading the deck" className="flex">
               <Spin onDark />
             </span>
           )}
-          <h2>
+          <h2 className="max-sm:flex-1">
             {data.deck.rank && `#${data.deck.rank} `}
             {data.deck.name}
             {data.deck.player && <span className="font-normal opacity-80"> - {data.deck.player}</span>}
@@ -137,9 +139,22 @@ export function EventPage() {
         </div>
       </header>
 
+      {/* Under lg, the column's details on one line, above the deck. */}
+      <div className="-mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 px-1 text-sm lg:hidden">
+        <Link to={`/format/${data.format.code}`} className="font-bold hover:text-link">
+          {data.format.name}
+        </Link>
+        <Stars count={data.stars} />
+        <SourceBadge source={data.source} />
+        <span className="text-muted">
+          {data.playerCount && `${data.playerCount} players - `}
+          {formatDate(data.date)}
+        </span>
+      </div>
+
       <div className="grid items-start gap-6 lg:grid-cols-[22rem_1fr]">
-        <aside className="overflow-hidden rounded-xl border border-line bg-surface lg:sticky lg:top-4">
-          <div className="flex flex-col items-center gap-1 border-b border-line px-3 py-3 text-center text-sm">
+        <aside className="overflow-hidden rounded-xl border border-line bg-surface max-lg:order-last lg:sticky lg:top-4">
+          <div className="flex flex-col items-center gap-1 border-b border-line px-3 py-3 text-center text-sm max-lg:hidden">
             <div className="flex items-center gap-2">
               <Link to={`/format/${data.format.code}`} className="text-base font-bold hover:text-link">
                 {data.format.name}
@@ -160,8 +175,11 @@ export function EventPage() {
               View on mtgtop8 ↗
             </a>
           </div>
-          <h2 className="sr-only">Standings · {data.standings.length}</h2>
-          <ol className="flex max-h-[75vh] flex-col overflow-y-auto p-1.5">
+          {/* Read out beside the deck; shown once the standings come after it. */}
+          <h2 className="bg-bar py-1.5 text-center text-sm font-bold tracking-wide text-bar-fg uppercase lg:sr-only">
+            Standings · {data.standings.length}
+          </h2>
+          <ol className="flex flex-col p-1.5 lg:max-h-[75vh] lg:overflow-y-auto">
             {data.standings.map((standing) => (
               <StandingRow
                 key={standing.deckId}

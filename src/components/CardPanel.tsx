@@ -115,3 +115,69 @@ export function CardPanel({
     </div>
   )
 }
+
+/** Where the pointer was when a card was clicked, to open its details there. */
+export type Anchor = { x: number; y: number }
+
+/**
+ * A card's panel, small, opened over the page where the card was clicked, as
+ * the site's own visual view does, and kept on screen near the edges;
+ * centred without an anchor (the keyboard, a phone). A click outside or
+ * Escape closes it. A native <dialog>, which keeps the focus inside while
+ * open and gives it back to the card on closing; its backdrop is clear, so
+ * the page stays in view, but for a phone's, where the panel covers most of it.
+ */
+export function CardDialog({
+  card,
+  info,
+  onClose,
+  anchor,
+}: {
+  card?: CardEntry
+  info?: CardInfo
+  onClose: () => void
+  anchor?: Anchor
+}) {
+  // Under and beside the pointer, flipped above it near the bottom of the
+  // window and slid in from the edges; centred when opened by the keyboard.
+  const place = (dialog: HTMLDialogElement) => {
+    const gap = 12
+    const { width, height } = dialog.getBoundingClientRect()
+    const at = anchor ?? { x: window.innerWidth / 2, y: (window.innerHeight - height) / 2 - gap }
+    const left = Math.min(Math.max(gap, at.x - width / 2), window.innerWidth - width - gap)
+    const below = at.y + gap
+    const top = below + height + gap <= window.innerHeight ? below : Math.max(gap, at.y - gap - height)
+    Object.assign(dialog.style, { inset: 'auto', left: `${left}px`, top: `${top}px` })
+  }
+
+  return (
+    <dialog
+      ref={(dialog) => {
+        if (!dialog) return
+        if (card && !dialog.open) {
+          dialog.showModal()
+          place(dialog)
+        } else if (!card && dialog.open) dialog.close()
+      }}
+      onClose={onClose}
+      // A click on the backdrop lands on the dialog itself, not its content.
+      onClick={(event) => event.target === event.currentTarget && onClose()}
+      aria-label={card?.name}
+      className="m-0 max-h-[calc(100dvh-1.5rem)] w-[min(34rem,calc(100vw-1.5rem))] overflow-y-auto rounded-xl border border-line bg-surface p-0 shadow-2xl shadow-black/25 backdrop:bg-black/40 sm:backdrop:bg-transparent"
+    >
+      {card && (
+        <div className="relative p-4 text-sm">
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            className="absolute top-2 right-2 z-10 rounded-lg px-2.5 py-1 text-muted hover:bg-surface-2 hover:text-fg"
+          >
+            ✕
+          </button>
+          <CardPanel card={card} info={info} compact />
+        </div>
+      )}
+    </dialog>
+  )
+}

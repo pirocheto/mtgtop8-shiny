@@ -6,11 +6,12 @@ import { MTGTOP8_PROXY } from '../lib/mtgtop8/http'
 import type { CardEntry, Deck, DeckSection } from '../lib/mtgtop8/types'
 import { useCardInfo } from '../lib/queries'
 import { cardKey } from '../lib/scryfall'
-import { CardPanel, Price, PriceBox } from './CardPanel'
+import { CardDialog, CardPanel, Price, PriceBox, type Anchor } from './CardPanel'
 import { CardImage } from './cards'
 import { useCardPreview } from './useCardPreview'
 import { useSelected, useSelectionStore, type Selection } from '../lib/selection'
 import { cx } from '../lib/utils'
+import { useIsWide } from '../lib/useMediaQuery'
 
 type CardSelection = Selection<CardEntry | undefined>
 
@@ -60,70 +61,28 @@ function CardRows({ title, cards, selection }: { title: string; cards: CardEntry
   )
 }
 
-/** Where the pointer was when a card was clicked, to open its details there. */
-type Anchor = { x: number; y: number }
-
 /**
- * The visual view's card details: the panel, small, opened where the card was
- * clicked, as the site's own visual view does, and kept on screen near the
- * edges. A click outside or Escape closes it. A native <dialog>, which keeps
- * the focus inside while open and gives it back to the card on closing; its
- * backdrop is clear, so the deck stays in view.
+ * The visual view's card details, and the list's on a phone: the panel,
+ * small, over the deck. It alone follows the selection.
  */
-function CardDialog({
+function PickedCardDialog({
   cards,
   selection,
   anchor,
 }: {
   cards: CardEntry[]
   selection: CardSelection
-  anchor: { current: Anchor | undefined }
+  anchor?: { current: Anchor | undefined }
 }) {
   const picked = useSelected(selection, (card) => card)
   const { data: infos } = useCardInfo(cards)
-  const close = () => selection.set(undefined)
-
-  // Under and beside the pointer, flipped above it near the bottom of the
-  // window and slid in from the edges; centred when opened by the keyboard.
-  const place = (dialog: HTMLDialogElement) => {
-    const gap = 12
-    const { width, height } = dialog.getBoundingClientRect()
-    const at = anchor.current ?? { x: (window.innerWidth - width) / 2, y: (window.innerHeight - height) / 2 - gap }
-    const left = Math.min(Math.max(gap, at.x - width / 2), window.innerWidth - width - gap)
-    const below = at.y + gap
-    const top = below + height + gap <= window.innerHeight ? below : Math.max(gap, at.y - gap - height)
-    Object.assign(dialog.style, { inset: 'auto', left: `${left}px`, top: `${top}px` })
-  }
-
   return (
-    <dialog
-      ref={(dialog) => {
-        if (!dialog) return
-        if (picked && !dialog.open) {
-          dialog.showModal()
-          place(dialog)
-        } else if (!picked && dialog.open) dialog.close()
-      }}
-      onClose={close}
-      // A click on the backdrop lands on the dialog itself, not its content.
-      onClick={(event) => event.target === event.currentTarget && close()}
-      aria-label={picked?.name}
-      className="m-0 w-[min(34rem,calc(100vw-1.5rem))] rounded-xl border border-line bg-surface p-0 shadow-2xl shadow-black/25 backdrop:bg-transparent"
-    >
-      {picked && (
-        <div className="relative p-4 text-sm">
-          <button
-            type="button"
-            onClick={close}
-            aria-label="Close"
-            className="absolute top-2 right-2 rounded-lg px-2 py-0.5 text-muted hover:bg-surface-2 hover:text-fg"
-          >
-            ✕
-          </button>
-          <CardPanel card={picked} info={infos?.get(cardKey(picked.name))} compact />
-        </div>
-      )}
-    </dialog>
+    <CardDialog
+      card={picked}
+      info={picked && infos?.get(cardKey(picked.name))}
+      onClose={() => selection.set(undefined)}
+      anchor={anchor?.current}
+    />
   )
 }
 
@@ -246,6 +205,9 @@ export const DeckView = memo(function DeckView({ deck }: { deck: Deck }) {
   const [mode, setMode] = useState<'list' | 'visual'>('list')
   const selection: CardSelection = useSelectionStore<CardEntry | undefined>(undefined)
   const anchor = useRef<Anchor>(undefined)
+  // On a phone, a card picked in the list opens over it, centred, rather than
+  // in the panel under the deck, a long scroll away from the line tapped.
+  const wide = useIsWide()
   const allCards = [...(deck.commanders ?? []), ...deck.main, ...deck.sideboard]
 
   const commander: DeckSection[] = deck.commanders?.length
@@ -344,14 +306,18 @@ export const DeckView = memo(function DeckView({ deck }: { deck: Deck }) {
               ))}
             </div>
           </div>
-          <PickedCardPanel cards={allCards} selection={selection} />
+          {wide ? (
+            <PickedCardPanel cards={allCards} selection={selection} />
+          ) : (
+            <PickedCardDialog cards={allCards} selection={selection} />
+          )}
         </>
       ) : (
         <div className="flex flex-col gap-5">
           {[...commander, ...sections, ...sideboard].map(({ title, cards }) => (
             <div key={title}>
               <h3 className="mb-2 text-sm font-semibold text-accent uppercase">{title}</h3>
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 lg:grid-cols-5">
                 {cards.map((card) => (
                   // A click opens the card's details over the page, as the
                   // site's own visual view does.
@@ -372,7 +338,7 @@ export const DeckView = memo(function DeckView({ deck }: { deck: Deck }) {
               </div>
             </div>
           ))}
-          <CardDialog cards={allCards} selection={selection} anchor={anchor} />
+          <PickedCardDialog cards={allCards} selection={selection} anchor={anchor} />
         </div>
       )}
     </section>

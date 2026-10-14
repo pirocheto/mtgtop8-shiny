@@ -10,6 +10,9 @@ import { useDelayed } from '../lib/useDelayed'
 import { LoadingImage } from './LoadingImage'
 import { Spin } from './Spin'
 
+/** On a phone, the commanders listed before "Show all". */
+const PHONE_SHOWN = 10
+
 const COLORS: ColorId[] = ['W', 'U', 'B', 'R', 'G', 'I']
 
 const COLOR_NAME: Record<ColorId, string> = {
@@ -51,7 +54,7 @@ const ColorPicker = memo(function ColorPicker({
   onChange: (colors: string) => void
 }) {
   return (
-    <div className="flex flex-wrap justify-center gap-4" role="group" aria-label="Colour identity">
+    <div className="flex flex-wrap justify-center gap-2.5 sm:gap-4" role="group" aria-label="Colour identity">
       {COLORS.map((color) => {
         const active = value.includes(color)
         return (
@@ -66,7 +69,7 @@ const ColorPicker = memo(function ColorPicker({
             // is picked, the others fade, so the filter reads at a glance.
             className={cx(
               // Square and sized to the symbol, so the ring is a circle.
-              'inline-flex size-12 shrink-0 items-center justify-center rounded-full transition duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight',
+              'inline-flex size-10 shrink-0 sm:size-12 items-center justify-center rounded-full transition duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-highlight',
               active
                 ? 'ring-[3px] ring-highlight ring-offset-2 ring-offset-surface'
                 : value
@@ -74,7 +77,7 @@ const ColorPicker = memo(function ColorPicker({
                   : 'hover:scale-110',
             )}
           >
-            <ManaCost cost={symbol(color)} className="size-12 [&>img]:size-12" />
+            <ManaCost cost={symbol(color)} className="size-10 sm:size-12 [&>img]:size-10 sm:[&>img]:size-12" />
           </button>
         )
       })}
@@ -84,13 +87,13 @@ const ColorPicker = memo(function ColorPicker({
 
 const Thumbnail = ({ path }: { path?: string }) =>
   path ? (
-    <LoadingImage src={siteImage(path)} alt="" spinner={false} className="h-10 w-20 shrink-0" />
+    <LoadingImage src={siteImage(path)} alt="" spinner={false} className="h-10 w-14 shrink-0 sm:w-20" />
   ) : (
-    <span className="h-10 w-20 shrink-0 bg-surface-2" />
+    <span className="h-10 w-14 shrink-0 bg-surface-2 sm:w-20" />
   )
 
 const Colors = ({ colors }: { colors: ColorId[] }) => (
-  <ManaCost cost={colors.map(symbol).join('')} className="w-20 shrink-0 justify-center" />
+  <ManaCost cost={colors.map(symbol).join('')} className="shrink-0 justify-center sm:w-20" />
 )
 
 /**
@@ -111,14 +114,18 @@ const CommanderList = memo(function CommanderList({
   /** The commander on display, on its archetype page, highlighted. */
   current?: string
 }) {
+  // On a phone, the leaders only until asked, as the breakdown of the other
+  // formats does: the whole list would bury the rest of the page.
+  const [expanded, setExpanded] = useState(() => shares.findIndex((share) => share.archetypeId === current) >= PHONE_SHOWN)
+  const hidden = shares.length - PHONE_SHOWN
   return (
     <>
       {shares.length === 0 && decks.length === 0 && <Empty>No decks match.</Empty>}
 
       {/* A thin gap between rows, so the thumbnails do not run into one another. */}
       <ul className="flex flex-col gap-0.5">
-        {shares.map((share) => (
-          <li key={share.archetypeId}>
+        {shares.map((share, i) => (
+          <li key={share.archetypeId} className={!expanded && i >= PHONE_SHOWN ? 'max-sm:hidden' : undefined}>
             <Link
               to={`/archetype/${share.archetypeId}?f=${format}&meta=${period}`}
               className={cx(
@@ -128,11 +135,11 @@ const CommanderList = memo(function CommanderList({
               )}
             >
               <Thumbnail path={share.thumbnailPath} />
-              <span className="min-w-0 flex-1 truncate text-center text-sm group-hover:text-link">
+              <span className="min-w-0 flex-1 truncate text-sm group-hover:text-link sm:text-center">
                 {share.name}
               </span>
               <Colors colors={share.colors} />
-              <span className="w-16 shrink-0 text-center text-sm tabular">
+              <span className="w-14 shrink-0 text-center text-sm tabular sm:w-16">
                 {share.permille} <span className="text-accent">‰</span>
               </span>
             </Link>
@@ -151,6 +158,16 @@ const CommanderList = memo(function CommanderList({
           </li>
         ))}
       </ul>
+      {hidden > 0 && (
+        <button
+          type="button"
+          onClick={() => setExpanded(!expanded)}
+          aria-expanded={expanded}
+          className="mt-2 rounded-lg border border-line py-2 text-sm font-medium hover:bg-surface-2 sm:hidden"
+        >
+          {expanded ? 'Show the leaders only' : `Show all commanders (${hidden} more)`}
+        </button>
+      )}
     </>
   )
 })
@@ -187,14 +204,14 @@ export function CommanderMetagame({
   return (
     <div className="flex flex-col gap-3">
       <ColorPicker value={colors} onChange={pickColors} />
-      <div className="flex justify-evenly">
+      <div className="flex flex-wrap justify-evenly gap-1">
         {(
           [
-            ['pop', 'Sort by popularity'],
-            ['alpha', 'Sort alphabetically'],
-            ['decks', 'Last decks'],
+            ['pop', 'Sort by popularity', 'Popular'],
+            ['alpha', 'Sort alphabetically', 'A–Z'],
+            ['decks', 'Last decks', 'Last decks'],
           ] as const
-        ).map(([value, label]) => (
+        ).map(([value, label, short]) => (
           <button
             key={value}
             type="button"
@@ -204,7 +221,9 @@ export function CommanderMetagame({
               setPage(1)
             }}
           >
-            {label}
+            {/* Shorter on a phone, so the three fit one row. */}
+            <span className="max-sm:hidden">{label}</span>
+            <span className="sm:hidden">{short}</span>
           </button>
         ))}
       </div>

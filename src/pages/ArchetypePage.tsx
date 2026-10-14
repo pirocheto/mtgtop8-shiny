@@ -15,7 +15,8 @@ const PAGE_SIZE = 20
 
 /**
  * Laid out as the site's archetype page: the format's metagame breakdown on
- * the left with this archetype highlighted, its decks on the right.
+ * the left with this archetype highlighted, its decks on the right; on a
+ * phone, the decks first.
  */
 export function ArchetypePage() {
   const { archetypeId = '' } = useParams()
@@ -45,8 +46,10 @@ export function ArchetypePage() {
         {data?.name ?? 'Archetype'} · {data?.format.name || formatName(format)}
       </h1>
 
+      {/* On a phone, the archetype's decks come first: the breakdown, a way
+          to other archetypes, follows them. */}
       {withMetagame && (
-        <Panel title="Metagame breakdown" loading={allLoading}>
+        <Panel title="Metagame breakdown" loading={allLoading} className="max-lg:order-last">
           {isPending ? (
             <Spinner />
           ) : (
@@ -88,15 +91,15 @@ export function ArchetypePage() {
           <Spinner />
         ) : (
           <div>
-            {!withMetagame && (
-              <div className="flex justify-center pt-3">
-                <PeriodSelect
-                  periods={data.periods}
-                  value={data.period.id}
-                  onChange={(meta) => update({ meta, page: undefined })}
-                />
-              </div>
-            )}
+            {/* Without a breakdown, the period picker heads the decks; with
+                one, it does too on a phone, where the breakdown comes last. */}
+            <div className={cx('flex justify-center py-3', withMetagame && 'lg:hidden')}>
+              <PeriodSelect
+                periods={data.periods}
+                value={data.period.id}
+                onChange={(meta) => update({ meta, page: undefined })}
+              />
+            </div>
             <DeckList decks={data.decks.items} />
             <Pagination
               page={data.decks.page}

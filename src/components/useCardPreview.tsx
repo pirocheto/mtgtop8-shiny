@@ -1,4 +1,4 @@
-import { useRef, useState, type MouseEvent } from 'react'
+import { useRef, useState, type PointerEvent } from 'react'
 import { createPortal } from 'react-dom'
 
 import { cardImageUrl } from '../lib/scryfall'
@@ -49,13 +49,16 @@ export function useCardPreview(name: string) {
     apply(image.current)
   }
 
+  // A mouse only: a finger has no hover, and a tap would leave the preview
+  // stuck over the list until the next one.
   const handlers = {
-    onMouseEnter: (event: MouseEvent) => {
+    onPointerEnter: (event: PointerEvent) => {
+      if (event.pointerType !== 'mouse') return
       place(event.clientX, event.clientY)
       setShown(true)
     },
-    onMouseMove: (event: MouseEvent) => place(event.clientX, event.clientY),
-    onMouseLeave: () => setShown(false),
+    onPointerMove: (event: PointerEvent) => event.pointerType === 'mouse' && place(event.clientX, event.clientY),
+    onPointerLeave: () => setShown(false),
   }
   const preview =
     shown &&

@@ -56,7 +56,7 @@ export function TitleBar({
   return (
     <header
       className={cx(
-        'relative flex min-h-9 items-center justify-center bg-bar px-24 py-1.5 text-bar-fg',
+        'relative flex min-h-9 items-center justify-center bg-bar px-10 py-1.5 text-bar-fg sm:px-24',
         className,
       )}
     >
